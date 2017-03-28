@@ -19,8 +19,6 @@ elseif strfind(time_str,'ms')
 
 elseif strfind(time_str,'s')
     time_num = get_time_num(time_str,'s');
-else
-    time_num = str2double(time_str);
 end   
     
 

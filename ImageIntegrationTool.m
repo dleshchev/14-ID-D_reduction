@@ -7,19 +7,17 @@ close all
 %% INPUT
 % paths for log files
 log_paths = { ...
-             'D:\rimmerman_1702\cytc\16.log', ...
-             'D:\rimmerman_1702\cytc\17.log', ...
+             'E:\Rimmerman_1611\Buffer\most_new_buffer\nov20buffer_T_jump\15deg_T_jump.log', ...
              };
 % paths for data. The size of this cell has to be the same as size of
 % lig_paths cell.
 data_paths = { ...
-              'D:\rimmerman_1702\cytc\', ...
-              'D:\rimmerman_1702\cytc\', ...
+              'E:\Rimmerman_1611\Buffer\most_new_buffer\nov20buffer_T_jump\', ...
               };
 
 % path for mask. Can be mccd, h5 and npy formats.
 % mask_path = 'D:\work\Experiments\2016\12_2016_Insulin\Mask_rimmerman_316.npy';
-mask_path = 'D:\matlab\14-ID-B_data_processing\14-ID-D_reduction\mask_cytc_24bm.h5';
+mask_path = 'D:\work\Experiments\2016\12_2016_Insulin\data\mask_insulin_35C_jump_24bm.h5';
 mask = readMask( mask_path );
 
 energy = 11.63;     % Incident x-ray energy in keV
@@ -47,7 +45,7 @@ Gamma = 0.10;
 
 % Saving options
 save_data_flag = 1; % 1 - SAVES the file; 0 - does nothing
-save_path = 'cytc_25C_24bm.h5'; % file for saving. has to have '.h5' extension
+save_path = '15C_buffer_24bm.h5'; % file for saving. has to have '.h5' extension
 
 %% Reading, integrating and scaling the images
 log_structure = [repmat('%s',1,4) repmat('%f',1,31)]; % auxiallry variable to aid with reading the log files
@@ -182,7 +180,7 @@ figure(1); clf;
 
 subplot(221)
 hold on
-nt = 17; % select the time delay
+nt = 2; % select the time delay
 
 idx_subset = find(Data.diff.delay == t(nt));
 curve_subset = Data.diff.ds(:,idx_subset);
@@ -196,7 +194,7 @@ hist(sum(curve_subset(400:750,:)),11)
 subplot(223)
 plot(idx_subset,curve_subset(400,:))
 %% manually exclude some of the curves
-idx_excl = [15,42,69,104,144,152,285,289,290,296,320,405,416]; % add numbers of curves which you dont like
+idx_excl = []; % add numbers of curves which you dont like
 
 %% Averaging with outlier rejection
 % here we will calculate the average of the curves. In addition we remove
@@ -249,55 +247,39 @@ end
 
 figure(2); clf; hold on;
 
-ysh1 = 0.03;
+ysh1 = 0.06;
 
 for kk = 1:length(t)
     
     line([0,10],[0 0] - (kk-1)*ysh1,'color',[0.5 0.5 0.5])
-%     plot(q, Data.diff.ds(:, Data.diff.delay == t(kk)) - (kk-1)*ysh1)
+    plot(q, Data.diff.ds(:, Data.diff.delay == t(kk)) - (kk-1)*ysh1)
     plot(q, Data.diff.ds_av(:,kk) - (kk-1)*ysh1,'k.-')
     
 end
 
 % set(gca, 'xscale','log')
-xlim([0.01 1])
+xlim([0.03 3])
 box on;
 xlabel('q, 1/A');
 ylabel('\DeltaS(q,t)')
 
 
 %% quick SVD to get an idea of what is going on
-Q_sel = q>=0.02 & q<=0.6;
-T_sel = 2:17;
-
-DATA = Data.diff.ds_av(Q_sel, T_sel);
+DATA = Data.diff.ds_av(q>=0.02 & q<=3.0,2:end);
 
 [uu,ss,vv] = svd(DATA);
 
 figure(2); clf;
 
 subplot(221)
-plot(q(Q_sel),DATA)
-
-subplot(222)
 semilogy(diag(ss),'sq-')
 
-n_cmp = 1:3;
+subplot(222)
+plot(uu(:,1:3))
 
 subplot(223)
-plot(q(Q_sel),uu(:,n_cmp))
+plot(vv(:,1:3))
 
-subplot(224)
-plot(Data.diff.t(T_sel),vv(:,n_cmp))
-set(gca,'xscale','log')
-
-%%
-
-figure(3); clf;
-
-plot(Data.diff.t(T_sel),vv(:,1),'sq-')
-set(gca,'xscale','log')
-xlim([5e-6 1e-1])
 %% just look into individual average curves
 figure(1); clf;
  

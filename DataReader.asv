@@ -6,22 +6,22 @@ function [  q, t, ds_av, ds_err, Data] =  DataReader( load_path )
 %   containing the standard errors for each (q,t) point.
 %   In addition, it provides Data structure, which contains total and
 %   differential individual curves. Data is organized as follows:
-%   Data.total.s_raw - unscaled total integrated curves
-%   Data.total.s     - scaled total curves
-%   Data.total.time  - time of image creation. It is a number of
+%   Data.total.s_raw - contains unscaled total integrated curves
+%   Data.total.s     - contains scaled total curves
+%   Data.total.time  - contains time of image creation. It is a number of
 %   seconds since 1st of January 0000
-%   Data.total.scan  - scan number
-%   Data.total.delay - time delay between laser and x-ray
-%   Data.diff.ds     - individual differential curves 
-%   Data.diff.time   - time when the LASER-ON curve was created
-%   Data.diff.scan   - scan number
-%   Data.diff.delay  - time delay of each differential curve
-%   Data.diff.ds_av  - the same as ds_av
-%   Data.diff.ds_err - the same as ds_err
-%   Data.diff.t      - unique time delays
-%   Data.diff.idx_incl - indexes of curves included into the calculation of
-%   average curves.
-%   Data.q           - q vector
+%   Data.total.scan  - contains scan number
+%   Data.total.delay - contains time delay between laser and x-ray
+%   Data.diff.ds     - di 
+%   Data.diff.time   -
+%   Data.diff.scan   -
+%   Data.diff.delay  -
+%   Data.diff.ds_av  -
+%   Data.diff.ds_err - 
+%   Data.diff.t      - 
+%   Data.q           -
+
+
 
 Data.total.s_raw = h5read(load_path,'/total/s_raw');
 Data.total.s     = h5read(load_path,'/total/s');
