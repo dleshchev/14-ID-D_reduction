@@ -7,22 +7,23 @@ clear all; close all
 %% Input
 
 % Specify the path for image file you want to mask
-image_path = 'E:\Rimmerman_1611\Buffer\most_new_buffer\nov20buffer_T_jump\15deg_T_jump_-5us_002.mccd';
+image_path = 'D:\rimmerman_1702\insulin\protein\51_3ms_003.mccd';
+
 
 % Specify the image center to help assess the quality of the mask
 x_cen = 1990;   % X center of the image in pixels
 y_cen = 1967;   % Y center of the image in pixels
-detx = 362;     % sample to detector distance in mm
+detx = 365;     % sample to detector distance in mm
 pixel_size = 34e4/3840*1e-3; % pixel size in mm
 energy = 11.63;
 
 % Do you want to create a new mask or use the previous one?
 use_old_mask_flag = 1;     % 1 - use the old one, 0 - make a new one
-old_mask_file = 'D:\work\Experiments\2016\12_2016_Insulin\data\mask_insulin_35C_jump_24bm.h5';         % path for the old mask
+old_mask_file = 'mask_insulin_24bm.h5';         % path for the old mask
 
 % Do you want to save mask?
 save_mask_flag = 0;         % 0 - do not save new mask, 1 - save new mask
-save_mask_file = 'mask_insulin_35C_jump_24bm.h5';        % path where you want to create a new mask
+save_mask_file = 'mask_insulin_24bm.h5';        % path where you want to create a new mask
 % - you should not overwrite the old files
 % - the file should have .h5 extension
 
@@ -69,7 +70,7 @@ end
 
 
 % You can vary the image scale to better see which pixels have to be masked
-Scale = 1.0;
+Scale = 0.6;
 
 % Update flag determines whether you want to draw another polygon or not.
 % update_flag = 0 allows you to look at the image after all the masking
@@ -78,7 +79,7 @@ update_flag = 0; % 0 - just shows the image; no polygon can be drawn; 1 - draws 
 
 % plot the image
 figure(1); clf;
-imagesc(image_data,zLim*Scale);
+imagesc(image_data,zLim(2)*[0.0 1.5]);
 axis square
 colormap('jet')
 
@@ -103,8 +104,8 @@ end
 q_grid_in = [];
 distr_flag = 1;
 % IntMax = zLim(2)*1.5;
-IntMax = 3500;
-
+IntMax = 4500;
+clear azimuthalIntegrator
 [ I, q, I_grid, I_distr ] = azimuthalIntegrator( image_data, mask, ...         % input image data
                                                  x_cen, y_cen, pixel_size, detx, energy, ... % input experimental parameters
                                                  q_grid_in, distr_flag, IntMax );                    % output space/grid
