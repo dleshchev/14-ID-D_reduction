@@ -18,6 +18,7 @@ nfiles = length(file_names);
 delays_num = zeros(size(delays));
 file_times_s = zeros(size(delays));
 for kk =1:nfiles
+%     disp(delays{kk})
     delays_num(kk) = time_str2num(delays{kk});
     file_times_s(kk) = datenum([file_dates{kk} ' ' file_times{kk}],'dd-mmm-yy HH:MM:SS')*86400;
 end
