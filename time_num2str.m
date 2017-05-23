@@ -9,10 +9,10 @@ if      A>=-12 && A<-9
 elseif  A>=-9 && A<-6
      time_str = [num2str(time_num*1e9) ' ns'];
 elseif  A>=-6 && A<-3
-     time_str = [num2str(time_num*1e6) ' us'];
+     time_str = [num2str(time_num*1e6) ' \mus'];
 elseif  A>=-3 && A<0
      time_str = [num2str(time_num*1e3) ' ms'];
-elseif A>=0
+elseif A>=0 || A==-Inf
      time_str = [num2str(time_num) ' s'];
 end
 

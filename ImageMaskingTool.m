@@ -7,7 +7,7 @@ clear all; close all
 %% Input
 
 % Specify the path for image file you want to mask
-image_path = 'D:\rimmerman_1702\insulin\protein\51_3ms_003.mccd';
+image_path = 'E:\Rimmerman_1611\Buffer\most_new_buffer\25deg_001.mccd';
 
 
 % Specify the image center to help assess the quality of the mask
@@ -19,11 +19,11 @@ energy = 11.63;
 
 % Do you want to create a new mask or use the previous one?
 use_old_mask_flag = 1;     % 1 - use the old one, 0 - make a new one
-old_mask_file = 'mask_insulin_24bm.h5';         % path for the old mask
+old_mask_file = 'E:\Old_insulin_data from Nov2016\mask_buffer_tjump8.h5';         % path for the old mask
 
 % Do you want to save mask?
-save_mask_flag = 0;         % 0 - do not save new mask, 1 - save new mask
-save_mask_file = 'mask_insulin_24bm.h5';        % path where you want to create a new mask
+save_mask_flag = 1;         % 0 - do not save new mask, 1 - save new mask
+save_mask_file = 'mask_insulin_24bm_Static_Nov2016.h5';        % path where you want to create a new mask
 % - you should not overwrite the old files
 % - the file should have .h5 extension
 
