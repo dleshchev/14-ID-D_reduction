@@ -7,19 +7,21 @@ close all
 %% INPUT
 % paths for log files
 log_paths = { ...
-             'D:\rimmerman_1702\cytc\16.log', ...
-             'D:\rimmerman_1702\cytc\17.log', ...
+             'D:\rimmerman_1702\cytc\23.log', ...
+             'D:\rimmerman_1702\cytc\24.log', ...
+             'D:\rimmerman_1702\cytc\25.log', ...
              };
 % paths for data. The size of this cell has to be the same as size of
 % lig_paths cell.
 data_paths = { ...
               'D:\rimmerman_1702\cytc\', ...
               'D:\rimmerman_1702\cytc\', ...
+              'D:\rimmerman_1702\cytc\', ...
               };
 
 % path for mask. Can be mccd, h5 and npy formats.
 % mask_path = 'D:\work\Experiments\2016\12_2016_Insulin\Mask_rimmerman_316.npy';
-mask_path = 'D:\matlab\14-ID-B_data_processing\14-ID-D_reduction\mask_cytc_24bm.h5';
+mask_path = 'D:\matlab\CytC\mask_cytc_24bm.h5';
 mask = readMask( mask_path );
 
 energy = 11.63;     % Incident x-ray energy in keV
@@ -33,8 +35,8 @@ pixel_size = 340/3840; % pixel size in mm
 q = linspace(0.005,4,1200)';
 
 % q-range for normalization of the total scattering curves
- qmin = 1.9; qmax = 2.1;
-%qmin = 1.475; qmax = 1.575;
+%  qmin = 1.9; qmax = 2.1;
+qmin = 1.475; qmax = 1.575;
 
 % reference time delay for subtraction
 t_ref = -5e-6; % in s
@@ -47,15 +49,9 @@ ClosestRefFlag = 'MovingAverage'; NREF = 2; % Weighted average of the
 % will be used. For example, NREF = 2 means that average of one previous 
 % and one next laser OFF will be usefd. NREF MUST BE EVEN !!! 
 
-% Criterion for the outlier rejection (Adapted Chauvenet's criterion).
-% Values in a range of 0.03-0.15 usually work well. The small values
-% correspond to 'hard' filtering (a lot of curves wil be rejected); the
-% large values correspond to soft filtering.
-Gamma = 0.10;
-
 % Saving options
 save_data_flag = 1; % 1 - SAVES the file; 0 - does nothing
-save_path = 'cytc_25C_24bm.h5'; % file for saving. has to have '.h5' extension
+save_path = 'cytc_25C_18mgml_nts.h5'; % file for saving. has to have '.h5' extension
 
 %% Reading, integrating and scaling the images
 log_structure = [repmat('%s',1,4) repmat('%f',1,31)]; % auxiallry variable to aid with reading the log files
@@ -214,7 +210,7 @@ end
 figure(1); clf;
 
 % manually exclude some of the curves
-idx_excl = [4,22,33,43]; % MovingAverage NREF = 2 case 
+idx_excl = []; % MovingAverage NREF = 2 case 
 
 
 subplot(211)
@@ -229,7 +225,7 @@ plot(curve_subset);
 title(['t = ' num2str(t(nt))])
  
 subplot(212)
-plotyy(idx_subset,curve_subset(6,:),...
+plotyy(idx_subset,curve_subset(7,:),...
        idx_subset,curve_subset(400,:))
 % plot(idx_subset,curve_subset(400,:))
 grid on
@@ -249,6 +245,12 @@ Data.diff.idx_incl = cell(length(t),1); % stores indexes of the curves used for 
 
 excl_mask = ones(size(Data.diff.ds(1,:)));
 excl_mask(idx_excl) = 0;
+
+% Criterion for the outlier rejection (Adapted Chauvenet's criterion).
+% Values in a range of 0.03-0.15 usually work well. The small values
+% correspond to 'hard' filtering (a lot of curves wil be rejected); the
+% large values correspond to soft filtering.
+Gamma = 0.25;
 
 for ii = 1:length(t)
     % select a subset of curves:
@@ -322,7 +324,7 @@ plot(q(Q_sel),DATA)
 subplot(222)
 semilogy(diag(ss),'sq-')
 
-n_cmp = 1:3;
+n_cmp = 1:5;
 
 subplot(223)
 plot(q(Q_sel),uu(:,n_cmp))
